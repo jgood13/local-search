@@ -1,78 +1,145 @@
-// Location API for saying city.
-// 
-var location1 = document.getElementById('location1')
+// automatically find location and search
 
-const options = {
-	method: 'GET',
-	headers: {
-		'X-RapidAPI-Host': 'fastah-ip.p.rapidapi.com',
-		'X-RapidAPI-Key': '515a2898a9msh2f25577eb75a280p1a4b8cjsnb61a243f2616'
-	}
-};
+// var location1 = document.getElementById('location1')
 
-fetch('https://fastah-ip.p.rapidapi.com/whereis/v1/json/auto', options)
-	.then(response => response.json()).then(function(data){
-    displayLocation(data)
-  })
-	.then(response => console.log(response))
-	.catch(err => console.error(err));
+// $(function(){
+//     let url3 = 'https://fastah-ip.p.rapidapi.com/whereis/v1/json/auto'
+//     $.ajax({
+//         url: url3,
+//         type: 'Get',
+//         headers: {
+//         'X-RapidAPI-Host': 'fastah-ip.p.rapidapi.com',
+// 	       'X-RapidAPI-Key': '515a2898a9msh2f25577eb75a280p1a4b8cjsnb61a243f2616'
+//         }
+//     }) .done(function (data){
+//         displayLocation(data)
+//     })
+//     var displayLocation = function (data){
+//           console.log(data)
+//         var justCity = data.locationData.cityName.split(',')
+//         location1.textContent = data.locationData.cityName
+//         var splitResult = justCity[0]
+//         $(function() {
 
-  var displayLocation = function (data){
-    location1.textContent= data.locationData.cityName
-  }
-
-// Search API for local recycling Info 
-// 
-$(function() {
-
-    result = '';
-    result2= '';
-    result3= '';
-    result4= '';
+//             let result1 = '';
+//             let url = 'https://api.valueserp.com/search?api_key=621401444E6F40F0AB557E3788926771&q=recycling&location='+ splitResult+'&num=3'
     
-    // 49/100 API KEY uses
-    var api_KEY= '8475c8f7cf63190a54808c26cc9b4360';
-    var url = 'http://api.serpstack.com/search?access_key=' + api_KEY +'&type=web&query=electronics+recycling&auto_location=1&num=4'
-    var url2 = 'http://api.serpstack.com/search?access_key=' + api_KEY +'&type=web&query=recycling&auto_location=1&num=4'
-  
-  
-    $.get(url, function (data) {
-        console.log(data)
-        
-        data.local_results.forEach(res =>{
-            
-            result = `<p>${res.title}</p>`
-            
-            $("#result").addClass("show")
-            $("#result").append(result)
-        })
-  
-        data.organic_results.forEach(res =>{
-            
-            result2 = `<p>${res.title}</p>
-            <a target="_blank" href="${res.url}">${res.url}</a>`
+//             $.ajax({
+//             url: url,
+//             type: 'GET',
+//             }).done(function(data){
+//                 console.log(data)
+//                 data.local_results.forEach(result =>{
+//                 result1 = `<p>${result.title}</p>`
+    
+//                 $("#result").addClass("show")
+//                 $("#result").append(result1)
+//             })     
+//             })  
+//         })
+//     }
+    
 
-            $("#result2").addClass("show")
-            $("#result2").append(result2)
+// })
+
+// search by asking for location 
+
+const succussCallback = (position) => {
+    console.log(position);
+    var latitude = position.coords.latitude
+    var longitude = position.coords.longitude
+    var apiKey = 'e6c7145ef0589d5c1799b396e8bd2be3'
+
+    let url = 'http://api.openweathermap.org/geo/1.0/reverse?lat='+latitude+'&lon='+longitude+'&limit=1&appid=' + apiKey
+        $.ajax({
+            url: url,
+            type: 'get',
+        }) .done(function (data){
+            console.log(data)
+            location1.textContent = data[0].name + ', ' + data[0].state
+            city = data[0].name
+
+            let result1 = '';
+            let url3 = 'https://api.valueserp.com/search?api_key=621401444E6F40F0AB557E3788926771&q=recycling&location='+ city+'&num=3'
+
+            $.ajax({
+            url: url3,
+            type: 'GET',
+            }).done(function(data){
+                console.log(data)
+                data.local_results.forEach(result =>{
+                result1 = `<p>${result.title}</p>`
+
+                $("#result").append(result1)
+                $("#result").addClass("show")
+            })     
+        })  
         })
-    })
-    $.get(url2, function (data) {
-        console.log(data)
-        data.local_results.forEach(res => {
-            
-            result3 = `<p>${res.title}</p>`
-            
-            $("#result3").addClass("show")
-            $("#result3").append(result3)
-        });
+}
+const errorCallback = (error) =>{
+    console.error(error)
+}
+
+navigator.geolocation.getCurrentPosition(succussCallback,errorCallback)
   
-        data.organic_results.forEach(res => {
+  
+// Serpstack API for local recycling Info 
+
+// $(function() {
+
+//  let result1 = '';
+//  let result2= '';
+//  let result3= '';
+//  let result4= '';
+    
+//     //4/100 API KEY uses
+//     var api_KEY= 'fb3d1f5a0dbb8be1449df85450cf1633';
+//     var url = 'http://api.serpstack.com/search?access_key=' + api_KEY +'&type=web&query=electronics+recycling&auto_location=1&num=4'
+
+//     $.ajax({
+//       url: url,
+//       type: 'GET',
+//     }).done(function(data){
+//         console.log(data)
+//         data.local_results.forEach(result =>{
+//         result1 = `<p>${result.title}</p>`
+
+//         $("#result").addClass("show")
+//         $("#result").append(result1)
+//       }) 
+//         data.organic_results.forEach(result =>{
+//         result2 = `<p>${result.title}</p>
+//         <a target="_blank" href="${result.url}">${result.url}</a>`
+
+//         $("#result2").addClass("show")
+//         $("#result2").append(result2)
+//       })
+        
+//     })  
+
+    
+//   var api_KEY= 'fb3d1f5a0dbb8be1449df85450cf1633';
+//   var url2 = 'http://api.serpstack.com/search?access_key=' + api_KEY +'&type=web&query=recycling&auto_location=1&num=4'
+//     $.ajax({
+//       url: url2,
+//       type:'GET',
+//     }).done(function(data){
+//       data.local_results.forEach(result => {
             
-            result4 = `<p>${res.title}</p>
-            <a target="_blank" href="${res.url}">${res.url}</a>`
+//       result3 = `<p>${result.title}</p>`
+        
+//       $("#result3").addClass("show")
+//       $("#result3").append(result3)
+//     })
+//     data.organic_results.forEach(result => {
             
-            $("#result4").addClass("show")
-            $("#result4").append(result4)
-        })
-    })
-})
+//       result4 = `<p>${result.title}</p>
+//       <a target="_blank" href="${result.url}">${result.url}</a>`
+      
+//       $("#result4").addClass("show")
+//       $("#result4").append(result4)
+//     })
+//   })
+
+// })
+

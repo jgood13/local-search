@@ -9,3 +9,7 @@
 #result.show, #result2.show, #result3.show, #result4.show{
     visibility: visible;
 }
+
+.hide{
+    visibility: hidden;
+}
