@@ -50,7 +50,7 @@ const succussCallback = (position) => {
     var longitude = position.coords.longitude
     var apiKey = 'e6c7145ef0589d5c1799b396e8bd2be3'
 
-    let url = 'http://api.openweathermap.org/geo/1.0/reverse?lat='+latitude+'&lon='+longitude+'&limit=1&appid=' + apiKey
+    let url = 'https://api.openweathermap.org/geo/1.0/reverse?lat='+latitude+'&lon='+longitude+'&limit=1&appid=' + apiKey
         $.ajax({
             url: url,
             type: 'get',
